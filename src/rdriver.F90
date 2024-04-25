@@ -257,7 +257,11 @@ use shr_sys_mod
       call shr_sys_flush(6)
 #endif
       end if
- 
+      
+#ifdef nowind
+      su3 = 0
+      sv3 = 0
+#endif
 !-----------------------------------------------------------------------
 !     land grids of the forcing fields assigned to 0 
 !-----------------------------------------------------------------------
