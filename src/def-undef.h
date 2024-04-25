@@ -1,0 +1,29 @@
+#define N_PROC 28 
+#define SPMD
+#define  SYNCH
+#undef  FRC_ANN
+#define CDFIN
+#undef  FRC_DAILY
+#define SOLAR
+#define  ACOS
+#undef  BIHAR
+#undef  SMAG_FZ
+#undef  SMAG_OUT
+#define NETCDF
+#undef BOUNDARY
+#define NODIAG
+#undef  ICE
+#undef SHOW_TIME
+#undef DEBUG
+#undef COUP
+#define  ISO
+#define D_PRECISION
+#undef  CANUTO
+#undef SOLARCHLORO
+#undef WAVE_FORCE	
+#define LDD97
+#undef TSPAS
+#undef  SMAG
+#define JMT_GLOBAL 115
+#undef TIDE
+#undef TIDE_OUT
