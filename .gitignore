@@ -1,3 +1,7 @@
+/*
+!bld/
+!src/
 *.o
 *.i
 *.mod
+mls.txt

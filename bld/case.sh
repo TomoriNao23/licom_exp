@@ -3,18 +3,28 @@ echo '-----------------------------------------------------------------'
 echo '     Set env variables available to model setup scripts (below): '
 echo '-----------------------------------------------------------------'
 
-setenv CASENAME wind0
-setenv LICOMROOT /data06/yyq/mls/licom2
+
+
+setenv CASENAME addwater
+set NUMBER = 360
+set NTASKS = 16 
+setenv RUNTYPE continue                   # run type:continue or initial
+setenv addwater yes
+setenv nowind no
+
+set pwd_licomroot = `readlink -f $0`
+set pwd_licomroot = "`dirname $pwd_licomroot`"
+set pwd_licomroot = "`dirname $pwd_licomroot`"
+setenv LICOMROOT $pwd_licomroot
 setenv SRCPATH  $LICOMROOT/src
 setenv BLDPATH  $LICOMROOT/bld
 setenv DATAPATH $LICOMROOT/data
 setenv EXEROOT  $LICOMROOT/$CASENAME
 setenv EXESRC   $EXEROOT/src
 setenv EXEDIR   $EXEROOT/exe
-setenv RUNTYPE  initial                   # run type:continue or initial
+
 set HISTOUT = 1                           # model historic output, no use for this version !!!!!
 set RESTOUT = 1                           # model restar file outpur every day
-set NTASKS = 8
 set NTHRDS  = 1
 set LID = "`date +%y%m%d-%H%M%S`"    
 
@@ -40,6 +50,18 @@ echo '-----------------------------------------------------------------'
 echo '-----------------------------------------------------------------'
 echo '     Produce the pre-compile file def-undef h                    '
 echo '-----------------------------------------------------------------'
+
+if ($addwater == 'yes') then
+  set ifaddwater = define
+else 
+  set ifaddwater = undef
+endif
+
+if ($nowind == 'yes') then
+  set ifnowind = define
+else 
+  set ifnowind = undef
+endif
 
 \cat >! def-undef.h << EOF
 #define N_PROC  $NTASKS 
@@ -70,6 +92,8 @@ echo '-----------------------------------------------------------------'
 #define JMT_GLOBAL 115
 #undef TIDE
 #undef TIDE_OUT
+#$ifaddwater addwater
+#$ifnowind nowind
 EOF
 
 echo '-----------------------------------------------------------------'
@@ -109,7 +133,7 @@ cd $EXEDIR
   AFT1       = 0.43
   AMV        = 1.0E-3
   AHV        = 0.3E-4
-  NUMBER     = 24
+  NUMBER     = $NUMBER
   NSTART     = $NSTART
   klv        = 30
   IO_HIST = $HISTOUT
@@ -129,14 +153,24 @@ ln -s $DATAPATH/INDEX.DATA INDEX.DATA
 ln -s $DATAPATH/TSinitial  TSinitial
 ln -s $DATAPATH/MODEL.FRC  MODEL.FRC
 ln -s $DATAPATH/dncoef.h1 dncoef.h1
- 
+
 echo '-----------------------------------------------------------------'
 echo '     Run the model using run script                              '
 echo '-----------------------------------------------------------------'
 \cat >! run << EOF
-mpirun -n $NTASKS ./licom2
+mpirun -n $NTASKS $EXEDIR/licom2 
 #bsub -J control1 -a intelmpi -n $NTASKS  -q hpc_linux -o out1_1.lsf mpirun.lsf ./licom2
 #bsub -R "span[ptile=4]" -J control1 -a intelmpi -n $NTASKS  -q hpc_linux -o out1_1.lsf mpirun.lsf ./licom2
 EOF
 
 chmod u+x run
+
+#mls
+if ($RUNTYPE == 'continue') then
+  cp -pf $DATAPATH/fort.22.0060-01-01-00000 $EXEDIR/fort.22
+endif
+\cat >> $EXESRC/Makefile << EOF
+run:
+	cd ../exe/ && ./run > screen &
+EOF
+

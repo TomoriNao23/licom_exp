@@ -31,6 +31,10 @@ use msg_mod
 #else
       real(r8)    :: LAMDA,wt1,wt2,adv_y,adv_x,adv_z,adv_x1,adv_x2
 #endif
+!mls
+#ifdef addwater
+real(r8),dimension(imt,jmt) :: area_rec
+#endif
 !XC
  
 !---------------------------------------------------------------------
@@ -46,6 +50,34 @@ use msg_mod
 !      Define the threthold latitute for zonal smoother
        fil_lat1=69.0D0
        fil_lat2=69.0D0
+
+!mls>>>>>>>>>>>>>>>
+#ifdef addwater
+!该部分计算需要添加淡水部分面积的倒数area_rec(imj,jmt),在非添加淡水部分area_rec=0
+   area_rec = 0.0
+   if (((cost(1).ge.0.7660)).and.(cost(jmt).le.0.9397))then
+      !0.7666为淡水下边界余纬的余弦值,9397为淡水上边界余纬的余弦值.该步判断每个线程是否存在添加格点
+      !$OMP PARALLEL DO PRIVATE (J,I)
+         DO J = 1,JMT
+            DO I = 1,IMT
+   if(ITNU(i,j).gt.0)then!判断是否海洋格点
+      if (((lon(i).ge.0).and.(lon(i).le.15)).or.((lon(i).ge.300).and.(lon(i).le.360))) then
+         if (((cost(j).ge.0.7660)).and.(cost(j).le.0.9397))then
+            area_rec(i,j) = 1.0 / dxdyt(j)
+         endif
+      endif
+   endif
+            END DO
+         END DO
+   endif
+!调试选项
+   !  if (mytid == 1)then
+   !        open (88, file = '/data06/yyq/mls/licom2_/mls.txt', status='unknown',form = 'formatted')
+   !       write(88,*)so(1),area_res
+   !         close(88)
+   !   endif
+#endif
+!mls<<<<<<<<<<<<<<<
 
 #if (defined ISO)
       AIDIF = 0.5D0
@@ -966,6 +998,11 @@ use msg_mod
                      STF (I,J) = SSF(I,J)/ODZP(1)
 #else
                      STF (I,J) = GAMMA * (SSS (I,J) - ATB (I,J,1,2))/ODZP(1)
+!mls>>>>>>>>>>>>>>>
+#ifdef addwater
+STF(I,J) = STF(I,J) + 0.1 * (10**6) * area_rec(i,j) * so(1) !添加淡水通量
+#endif
+!mls<<<<<<<<<<<<<<<
 ! sss=(sst-35)/1000.
 !                     STF (I,J) = fresh(i,j)*35.0/1000.0/1000.0&
 !                   +GAMMA*(SSS(I,J)-ATB (I,J,1,2))*seaice(i,j)/ODZP(1)&
