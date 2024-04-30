@@ -5,36 +5,44 @@ http://project.lasg.ac.cn/LFS/
 
 Deployment steps
 ============
-1.Add file execution permissions 
+## 1.Grant Executable Eermission to File case.sh 
 ```
 chmod 777 ./bld/case.sh
 ```
-
-2.MODIFY the parameters in ./bld/case.sh, and then CREATE AN EXPERIENCE named $CASEAME at the location ./$CASENAME
+## 2.Modify the Parameters in case.sh
 ```
 vim ./bld/case.sh
+```
+## 3.CREATE an Experiment Named $CASEAME at the Location ./$CASENAME
+```
 ./bld/case.sh
 ```
-
-3.run the experimental
+## 4.Run the Experiment
 ```
-./$CASEAME/exe/run
+- ./$CASEAME/exe/run
 ```
-or by the way of $ to submit to the backend
+or by the way of $ to submit to the backend (Screen output is redirected to ./$CASEAME/exe/screen)
 ```
-cd ./$CASEAME/src/
-make run (#Screen output is redirected to ./$CASEAME/exe/screen)
+- cd ./$CASEAME/src/
+- make run 
 ```
 
 Dependency library
 ============
-1.cpp (PRECOMPILE.F90 TO .f90)
-.e.g. GNU Compiler Collection
+## 1.cpp (PRECOMPILE .F90 TO .f90 FILES)   
+- GNU Compiler Collection
 
-2.mpi_fortran (Compile .f90 files)
-.e.g. Intel® oneAPI Base Toolkit + Intel® HPC Toolkit(High-Performance Computing)
-.e.g. GNU Compiler Collection + Openmpi
+## 2.mpi_fortran (COMPILE .f90 FILES)  
+- Intel® oneAPI Base Toolkit + Intel® HPC Toolkit(High-Performance Computing)  
+- GNU Compiler Collection + Openmpi
 
-3.netcdf for C and FORTRAN
-.e.g. https://www.unidata.ucar.edu/software/netcdf/
-.e.g. git clone https://github.com/dongli/starman
+## 3.netcdf for C and FORTRAN  
+- https://www.unidata.ucar.edu/software/netcdf/    
+- git clone https://github.com/dongli/starman
+
+## 4.Makefile
+
+Future Work
+============
+- use CMAKE 
+- use CUDAC to Implemente GPU parallelism with CPU parallelism
