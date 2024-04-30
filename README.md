@@ -1,7 +1,8 @@
 Introduction
 ============
-LICOM is LASG/IAP Climate system Ocean model
-http://project.lasg.ac.cn/LFS/
+##LICOM is LASG/IAP Climate system Ocean model http://project.lasg.ac.cn/LFS/
+##This MODEL licom_exp is simplified by LICOM2.0
+##THIS MODEL IS ONLY FOR THE COURSE STUDYING OF <NUMERICAL EXPERIMENTS FOR OCEANIC CIRCULATION AND AIR-SEA INTERACTION>
 
 Deployment steps
 ============
