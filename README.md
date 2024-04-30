@@ -5,20 +5,23 @@ http://project.lasg.ac.cn/LFS/
 
 Deployment steps
 ============
-## 1.Grant Executable Permission to File case.sh 
+## 1.Grant Executable Permission 
+to ZSHELL SCRIPT case.sh 
 ```
 chmod 777 ./bld/case.sh
 ```
-## 2.Modify the Parameters in case.sh
+## 2.Modify the Parameters 
+in case.sh
 ```
 vim ./bld/case.sh
 ```
-## 3.CREATE an Experiment Named $CASEAME at the Location ./$CASENAME
+## 3.Create an Experiment 
+Named $CASEAME at the Location ./$CASENAME
 ```
 ./bld/case.sh
 ```
 ## 4.Run the Experiment
-- run script
+- SCEIPT run
 ```
 ./$CASEAME/exe/run
 ```
