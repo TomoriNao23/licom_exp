@@ -13,7 +13,7 @@ use isopyc_mod
 use forc_mod
 use pmix_mod
 #ifdef SPMD
-use msg_mod
+use msg_mod, only: tag_1d,tag_2d,tag_3d,tag_4d,nproc,status,mpi_comm_ocn
 #endif
  
       IMPLICIT NONE
@@ -33,7 +33,8 @@ use msg_mod
 #endif
 !mls
 #ifdef addwater
-real(r8),dimension(imt,jmt) :: area_rec
+real(r8)::area_all    !添加淡水总面积
+real(r8),dimension(imt,jmt) :: area_rec   !添加淡水格点面积的倒数
 #endif
 !XC
  
@@ -53,6 +54,25 @@ real(r8),dimension(imt,jmt) :: area_rec
 
 !mls>>>>>>>>>>>>>>>
 #ifdef addwater
+!计算添加淡水区域总面积
+area_all = 0
+if (((cost(1).ge.0.7660)).and.(cost(jmt).le.0.9397))then
+   !0.7666为淡水下边界余纬的余弦值,9397为淡水上边界余纬的余弦值.该步判断每个线程是否存在添加格点
+   !$OMP PARALLEL DO PRIVATE (J,I)
+      DO J = 2,JMT
+         DO I = 1,IMT
+if(ITNU(i,j).gt.0)then!判断是否海洋格点
+   if (((lon(i).ge.0).and.(lon(i).le.15)).or.((lon(i).ge.300).and.(lon(i).le.360))) then
+      if (((cost(j).ge.0.7660)).and.(cost(j).le.0.9397))then
+         area_all = area_all + dxdyt(j)
+      endif
+   endif
+endif
+         END DO
+      END DO
+endif
+call mpi_allreduce(mpi_in_place,area_all,1,MPI_PR,mpi_sum,mpi_comm_ocn,ierr)
+
 !该部分计算需要添加淡水部分面积的倒数area_rec(imj,jmt),在非添加淡水部分area_rec=0
    area_rec = 0.0
    if (((cost(1).ge.0.7660)).and.(cost(jmt).le.0.9397))then
@@ -63,19 +83,20 @@ real(r8),dimension(imt,jmt) :: area_rec
    if(ITNU(i,j).gt.0)then!判断是否海洋格点
       if (((lon(i).ge.0).and.(lon(i).le.15)).or.((lon(i).ge.300).and.(lon(i).le.360))) then
          if (((cost(j).ge.0.7660)).and.(cost(j).le.0.9397))then
-            area_rec(i,j) = 1.0 / dxdyt(j)
+            area_rec(i,j) = 1.0 / area_all
          endif
       endif
    endif
             END DO
          END DO
    endif
+
 !调试选项
-   !  if (mytid == 1)then
-   !        open (88, file = '/data06/yyq/mls/licom2_/mls.txt', status='unknown',form = 'formatted')
-   !       write(88,*)so(1),area_res
-   !         close(88)
-   !   endif
+!     if (mytid == 1)then
+!         open (88, file = '/data06/yyq/mls/licom2/mls.txt', status='unknown',form = 'formatted')
+!         write(88,*) area_rec
+!         close(88)
+!      endif
 #endif
 !mls<<<<<<<<<<<<<<<
 
@@ -1000,7 +1021,7 @@ real(r8),dimension(imt,jmt) :: area_rec
                      STF (I,J) = GAMMA * (SSS (I,J) - ATB (I,J,1,2))/ODZP(1)
 !mls>>>>>>>>>>>>>>>
 #ifdef addwater
-STF(I,J) = STF(I,J) + 0.1 * (10**6) * area_rec(i,j) * so(1) !添加淡水通量
+STF(I,J) = STF(I,J) - 0.1 * (10**6) * area_rec(i,j) * (34.7 * 0.001) !添加淡水通量
 #endif
 !mls<<<<<<<<<<<<<<<
 ! sss=(sst-35)/1000.

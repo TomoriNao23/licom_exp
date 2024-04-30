@@ -5,8 +5,8 @@ echo '-----------------------------------------------------------------'
 
 
 
-setenv CASENAME addwater
-set NUMBER = 360
+setenv CASENAME addwater_new
+set NUMBER = 60
 set NTASKS = 16 
 setenv RUNTYPE continue                   # run type:continue or initial
 setenv addwater yes
