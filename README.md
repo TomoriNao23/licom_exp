@@ -5,7 +5,7 @@ http://project.lasg.ac.cn/LFS/
 
 Deployment steps
 ============
-## 1.Grant Executable Eermission to File case.sh 
+## 1.Grant Executable Permission to File case.sh 
 ```
 chmod 777 ./bld/case.sh
 ```
@@ -18,29 +18,30 @@ vim ./bld/case.sh
 ./bld/case.sh
 ```
 ## 4.Run the Experiment
+- run script
 ```
-- ./$CASEAME/exe/run
+./$CASEAME/exe/run
 ```
-or by the way of $ to submit to the backend (Screen output is redirected to ./$CASEAME/exe/screen)
+- by the way of $ to submit to the backend (Screen output is redirected to ./$CASEAME/exe/screen)
 ```
-- cd ./$CASEAME/src/
-- make run 
+cd ./$CASEAME/src/
+make run 
 ```
 
 Dependency library
 ============
-## 1.cpp (PRECOMPILE .F90 TO .f90 FILES)   
+## cpp (PRECOMPILE .F90 TO .f90 FILES)   
 - GNU Compiler Collection
-
-## 2.mpi_fortran (COMPILE .f90 FILES)  
+## mpi_fortran (COMPILE .f90 FILES)  
 - Intel® oneAPI Base Toolkit + Intel® HPC Toolkit(High-Performance Computing)  
 - GNU Compiler Collection + Openmpi
-
-## 3.netcdf for C and FORTRAN  
+## netcdf for C and FORTRAN  
 - https://www.unidata.ucar.edu/software/netcdf/    
+starman (Another package manager for HPC warriors)
+```
 - git clone https://github.com/dongli/starman
-
-## 4.Makefile
+```
+## Makefile
 
 Future Work
 ============
