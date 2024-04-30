@@ -37,9 +37,9 @@ Dependency library
 - GNU Compiler Collection + Openmpi
 ## netcdf for C and FORTRAN  
 - https://www.unidata.ucar.edu/software/netcdf/    
-starman (Another package manager for HPC warriors)
+- starman (Another package manager for HPC warriors)
 ```
-- git clone https://github.com/dongli/starman
+git clone https://github.com/dongli/starman
 ```
 ## Makefile
 
