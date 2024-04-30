@@ -6,7 +6,7 @@ http://project.lasg.ac.cn/LFS/
 Deployment steps
 ============
 ## 1.Grant Executable Permission 
-to ZSHELL SCRIPT case.sh 
+to CSHELL SCRIPT case.sh 
 ```
 chmod 777 ./bld/case.sh
 ```
