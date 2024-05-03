@@ -4,34 +4,6 @@ LICOM is LASG/IAP Climate system Ocean model http://project.lasg.ac.cn/LFS/
 This MODEL licom_exp is simplified by LICOM2.0  
 THIS MODEL IS ONLY FOR THE COURSE STUDYING OF "NUMERICAL EXPERIMENTS FOR OCEANIC CIRCULATION AND AIR-SEA INTERACTION"
 
-Deployment steps
-============
-## 1.Grant Executable Permission 
-to CSHELL SCRIPT case.sh 
-```
-chmod 777 ./bld/case.sh
-```
-## 2.Modify the Parameters 
-in case.sh
-```
-vim ./bld/case.sh
-```
-## 3.Create an Experiment 
-Named $CASEAME at the Location ./$CASENAME
-```
-./bld/case.sh
-```
-## 4.Run the Experiment
-- SCEIPT run
-```
-./$CASEAME/exe/run
-```
-- by the way of $ to submit to the backend (Screen output is redirected to ./$CASEAME/exe/screen)
-```
-cd ./$CASEAME/src/
-make run 
-```
-
 Dependency library
 ============
 ## cpp (PRECOMPILE .F90 TO .f90 FILES)   
@@ -47,7 +19,37 @@ git clone https://github.com/dongli/starman
 ```
 ## Makefile
 
+
+Deployment steps
+============
+## 1.Grant Executable Permission 
+of CSHELL SCRIPT [case.sh](./bld/case.sh)
+```
+chmod 777 ./bld/case.sh
+```
+## 2.Modify the Parameters 
+in [case.sh](./bld/case.sh)
+```
+vim ./bld/case.sh
+```
+## 3.Create an Experiment 
+Named [CASEAME](./$CASENAME) at the Location [./CASENAME](./$CASENAME) by [Makefile](./$CASENAME/src/Makefile)
+```
+./bld/case.sh
+```
+## 4.Run the Experiment
+- SCEIPT [run](./$CASENAME/exe)
+```
+./$CASEAME/exe/run
+```
+- by the way of $ to submit to the backend (Screen output is [redirected] (to ./$CASEAME/exe/screen))
+```
+cd ./$CASEAME/src/
+make run 
+```
+
 Future Work
 ============
 - use CMAKE 
 - use CUDAC to Implemente GPU parallelism with CPU parallelism
+- use DOCKER
