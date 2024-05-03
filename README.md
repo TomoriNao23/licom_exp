@@ -1,6 +1,6 @@
 Introduction
 ============
-LICOM is [LASG/IAP Climate system Ocean model](http://project.lasg.ac.cn/LFS/) 
+LICOM is [LASG/IAP Climate system Ocean model](http://project.lasg.ac.cn/LFS/)  
 This MODEL licom_exp is simplified by LICOM2.0  
 THIS MODEL IS ONLY FOR THE COURSE STUDYING OF "NUMERICAL EXPERIMENTS FOR OCEANIC CIRCULATION AND AIR-SEA INTERACTION"
 
@@ -13,7 +13,7 @@ Dependency library
 - GNU Compiler Collection + Openmpi
 ## netcdf for C and FORTRAN  
 - https://www.unidata.ucar.edu/software/netcdf/    
-- starman (Another package manager for HPC warriors)
+- [starman](https://github.com/dongli/starman) (Another package manager for HPC warriors)
 ```
 git clone https://github.com/dongli/starman
 ```
@@ -48,6 +48,7 @@ make run
 
 Future Work
 ============
+- use DOCKER
 - use CMAKE 
 - use CUDAC to Implemente GPU parallelism with CPU parallelism
-- use DOCKER
+
